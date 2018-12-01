@@ -3,15 +3,17 @@ package com.example.masutech.doubletimer
 import android.os.CountDownTimer
 import android.widget.TextView
 
-class MyCountDownTimer(millsInFuture: Long, private val timerText: TextView): CountDownTimer(millsInFuture, 10) {
+class MyCountDownTimer(millsInFuture: Long): CountDownTimer(millsInFuture, 10) {
 
-    override fun onTick(millisUntilFinished: Long) {
-        timerText.text = formatTime(millisUntilFinished)
-    }
+    private val tickListenerFuncList: ArrayList<(Long) -> Unit> = ArrayList()
+    private val finishListenerFuncList: ArrayList<() -> Unit> = ArrayList()
 
-    override fun onFinish() {
-        timerText.text = "Time up!"
-    }
+
+    override fun onTick(millisUntilFinished: Long) = tickListenerFuncList.forEach { it(millisUntilFinished)}
+    override fun onFinish() = finishListenerFuncList.forEach { it() }
+
+    fun setOnTickListener(listener: (Long) -> Unit) = tickListenerFuncList.add(listener)
+    fun setOnFinishListener(listener: () -> Unit) = finishListenerFuncList.add(listener)
 
 
 }

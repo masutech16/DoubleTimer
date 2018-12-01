@@ -26,12 +26,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.One_min1).setOnClickListener(onClickTimeButtonEvent(timeKeeper1, timerView1, 60))
         findViewById<Button>(R.id.Thirty_sec1).setOnClickListener(onClickTimeButtonEvent(timeKeeper1, timerView1, 30))
 
-        findViewById<Button>(R.id.Stop1).setOnClickListener {
-            timer1 = MyCountDownTimer(timeKeeper1.countTime, timerView1)
+        findViewById<Button>(R.id.Start1).setOnClickListener {
+            timer1 = MyCountDownTimer(timeKeeper1.countTime)
             timer1?.start()
+            startTimer(timer1!!, timerView1)
+
         }
 
-        findViewById<Button>(R.id.Start1).setOnClickListener {
+        findViewById<Button>(R.id.Stop1).setOnClickListener {
             timer1?.cancel()
             timeKeeper1.resetTime()
             timerView1.text = formatTime(0)
@@ -41,9 +43,10 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.One_min2).setOnClickListener(onClickTimeButtonEvent(timeKeeper2, timerView2, 60))
         findViewById<Button>(R.id.Thirty_min2).setOnClickListener(onClickTimeButtonEvent(timeKeeper2, timerView2, 30))
 
-        findViewById<Button>(R.id.Stop2).setOnClickListener {
-            timer2 = MyCountDownTimer(timeKeeper2.countTime, timerView2)
+        findViewById<Button>(R.id.Start2).setOnClickListener {
+            timer2 = MyCountDownTimer(timeKeeper2.countTime)
             timer2?.start()
+            startTimer(timer2!!, timerView2)
         }
 
         findViewById<Button>(R.id.Stop2).setOnClickListener {
@@ -58,5 +61,10 @@ class MainActivity : AppCompatActivity() {
             timeKeeper.addTimeBySeconds(addSecondTime)
             timerView.text = formatTime(timeKeeper.countTime)
         }
+    }
+
+    private fun startTimer(timer: MyCountDownTimer,  timerView: TextView) {
+        timer.setOnTickListener {millsUntilFinished -> timerView.text = formatTime(millsUntilFinished) }
+        timer.setOnFinishListener { timerView.text = "Time up!" }
     }
 }
