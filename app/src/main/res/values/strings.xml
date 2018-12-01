@@ -3,6 +3,6 @@
     <string name="one_minute">+ 1分</string>
     <string name="thirty_seconds">+ 30秒</string>
     <string name="start">Start</string>
-    <string name="stop">Stop</string>
+    <string name="stop">Reset</string>
     <string name="count">00:00:00</string>
 </resources>
