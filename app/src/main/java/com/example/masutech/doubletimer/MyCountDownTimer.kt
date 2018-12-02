@@ -1,12 +1,28 @@
 package com.example.masutech.doubletimer
 
 import android.os.CountDownTimer
-import android.widget.TextView
 
-class MyCountDownTimer(millsInFuture: Long): CountDownTimer(millsInFuture, 10) {
+class MyCountDownTimer(millsInFuture: Long): CountDownTimer(millsInFuture, 16) {
+
+    var isRunning = false
+        private set
 
     private val tickListenerFuncList: ArrayList<(Long) -> Unit> = ArrayList()
     private val finishListenerFuncList: ArrayList<() -> Unit> = ArrayList()
+
+    init {
+        setOnFinishListener { this.isRunning = false }
+    }
+
+    fun startTimer() {
+        isRunning = true
+        super.start()
+    }
+
+    fun stopTimer() {
+        isRunning = false
+        super.cancel()
+    }
 
 
     override fun onTick(millisUntilFinished: Long) = tickListenerFuncList.forEach { it(millisUntilFinished)}
