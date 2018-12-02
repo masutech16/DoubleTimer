@@ -19,23 +19,20 @@ class MainActivity : AppCompatActivity() {
         val timeKeeper1 = TimeKeeper()
         val timeKeeper2 = TimeKeeper()
 
-        var timer1:MyCountDownTimer? = null
-        var timer2:MyCountDownTimer? = null
+        var timer1 = MyCountDownTimer()
+        var timer2 = MyCountDownTimer()
 
         // buttonにイベントを追加
         findViewById<Button>(R.id.One_min1).setOnClickListener(onClickTimeButtonEvent(timeKeeper1, timerView1, 60))
         findViewById<Button>(R.id.Thirty_sec1).setOnClickListener(onClickTimeButtonEvent(timeKeeper1, timerView1, 30))
 
         findViewById<Button>(R.id.Start1).setOnClickListener {
-            if (timer1?.isRunning == true) return@setOnClickListener
-            timer1 = MyCountDownTimer(timeKeeper1.countTime)
-            timer1?.startTimer()
-            startTimer(timer1!!, timerView1)
-
+            if (timer1.isRunning) return@setOnClickListener
+            startTimer(timer1, timeKeeper1, timerView1)
         }
 
         findViewById<Button>(R.id.Stop1).setOnClickListener {
-            timer1?.stopTimer()
+            timer1.stopTimer()
             timeKeeper1.resetTime()
             timerView1.text = formatTime(0)
         }
@@ -45,14 +42,12 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.Thirty_min2).setOnClickListener(onClickTimeButtonEvent(timeKeeper2, timerView2, 30))
 
         findViewById<Button>(R.id.Start2).setOnClickListener {
-            if (timer2?.isRunning == true) return@setOnClickListener
-            timer2 = MyCountDownTimer(timeKeeper2.countTime)
-            timer2?.start()
-            startTimer(timer2!!, timerView2)
+            if (timer2.isRunning) return@setOnClickListener
+            startTimer(timer2, timeKeeper2, timerView2)
         }
 
         findViewById<Button>(R.id.Stop2).setOnClickListener {
-            timer2?.stopTimer()
+            timer2.stopTimer()
             timeKeeper2.resetTime()
             timerView2.text = formatTime(0)
         }
@@ -65,8 +60,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startTimer(timer: MyCountDownTimer,  timerView: TextView) {
+    private fun startTimer(timer: MyCountDownTimer, timeKeeper: TimeKeeper, timerView: TextView) {
         timer.setOnTickListener {millsUntilFinished -> timerView.text = formatTime(millsUntilFinished) }
         timer.setOnFinishListener { timerView.text = "Time up!" }
+        timer.startTimer(timeKeeper.countTime)
     }
 }
